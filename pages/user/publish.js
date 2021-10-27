@@ -1,9 +1,24 @@
-import { Container, Box, Typography, TextField, Select, Button } from '@material-ui/core'
+import { useState } from 'react'
+import {
+    Container,
+    Box,
+    Typography,
+    TextField,
+    Select,
+    Button,
+    IconButton
+} from '@material-ui/core'
+
+import { useDropzone } from 'react-dropzone'
+import { DeleteForever } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 
 import TemplateDefault from '../../src/templates/Default'
 
+// Codigo CSS em Java Script
 const useStyles = makeStyles((theme) => ({
+    mask:{}, //para poder usar como filho de thumb.
+    mainImage: {}, 
     container: {
         padding: theme.spacing(8, 0, 6),
     },
@@ -13,11 +28,82 @@ const useStyles = makeStyles((theme) => ({
     box: {
         backgroundColor: theme.palette.background.white,
         padding: theme.spacing(3)
-    }
+    },
+    thumbContainer: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        marginTop: 15,
+    },
+    dropzone: {
+        display: 'flex', // deixar os item um ao lado do outro
+        justifyContent: 'center', // deixar centralizado da direta para a esquerda
+        alignItems: 'center', // deixar centralizado do topo para a borda
+        textAlign: 'center', // deixar o texto na box centralizado
+        padding: 10,
+        width: 200,
+        height: 150,
+        margin: '0 15px 15px 0',
+        background: theme.palette.background.default,
+        border: '2px dashed black', // deixar o contorno da box com traço
+    },
+    thumb: {
+        position: 'relative',
+        width: 200,
+        height: 150,
+        backgroundSize: 'cover',
+        margin: '0 15px 15px 0',
+        backgroundPosition: 'center center',
+
+        '& $mainImage': {
+            backgroundColor: 'blue',
+            padding: '6px 10px',
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+        },
+
+        //fazer aparecer a mask quando passar o mouse.
+        '&:hover $mask': { 
+            display: 'flex',
+        },
+
+        //a mask só aparece quando passar o mouse.
+        '& $mask': { // filho de thumb
+            display: 'none',
+            justifyContent: 'center',
+            alignItems: 'center',
+            textAlign: 'center',
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            width: '100%',
+            height: '100%',
+        }
+    },
 }))
 
 const Publish = () => {
     const classes = useStyles()
+    const [files, setFiles] = useState([])
+
+    const { getRootProps, getInputProps } = useDropzone({
+        accept: 'image/*',
+        onDrop: (acceptFile) => {
+            const newFiles = acceptFile.map(file => {
+                return Object.assign(file, {
+                    preview: URL.createObjectURL(file)
+                })
+            })
+
+            setFiles([
+                ...files,
+                ...newFiles,
+            ])
+        }
+    })
+
+    const handleRemoveFile = fileName => {
+        const newFileState = files.filter(file => file.name !== fileName)
+        setFiles(newFileState)
+    }
     
     return (
         <TemplateDefault>
@@ -82,6 +168,40 @@ const Publish = () => {
                     <Typography component="div" variant="body2" color="textPrimary">
                         A primeira imagem é a foto principal do seu anúncio.
                     </Typography>
+                    <Box className={classes.thumbContainer}>
+                        <Box className={classes.dropzone} {...getRootProps()}>
+                            <input {...getInputProps()} />
+                            <Typography variant="body2" color="textPrimary">
+                                Clique para adicionar ou arraste a imagem para aqui.
+                            </Typography>
+                        </Box>
+
+                        {
+                            files.map((file, index) => (
+                                <Box 
+                                    key={file.name}
+                                    className={classes.thumb}
+                                    style={{backgroundImage: `url(${file.preview})`}}
+                                >
+                                    {
+                                        index === 0 ?
+                                            <Box className={classes.mainImage}>
+                                                <Typography variant="body2" color="Secondary">
+                                                    Principal
+                                                </Typography>
+                                            </Box>
+                                        : null
+                                    }
+                                    <Box className={classes.mask}>
+                                        <IconButton color="Secondary" onClick={() => handleRemoveFile(file.name)}>
+                                            <DeleteForever fontSize="large" />
+                                        </IconButton>
+                                    </Box>
+                                </Box>
+                            ))
+                        }
+                        
+                    </Box>    
                 </Box>
             </Container>
 
