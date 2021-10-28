@@ -30,6 +30,7 @@ export default function Home() {
   const classes = useStyles() //Usando o useStyle que foi definido acima.
   return (
     <TemplateDefault>
+
       <Container maxWidth="sm" className={classes.container}>
         <Typography component="h1" variant="h2" align="center">
           Meus Anúncios
@@ -38,6 +39,7 @@ export default function Home() {
           Publicar novo anúncio
         </Button>
       </Container>
+
       <Container maxWidth="md">
         <Grid container spacing={4}>
           <Grid item xs={12} sd={6} md={4}>
@@ -141,7 +143,9 @@ export default function Home() {
             </Card>
           </Grid>
         </Grid>
+        
       </Container>
+
     </TemplateDefault>
   )
 }
