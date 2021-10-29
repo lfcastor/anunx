@@ -1,33 +1,89 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Box from '@material-ui/core/Box';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+import React, { useState } from 'react'
+import Link from 'next/link'
+import { makeStyles } from '@material-ui/core/styles'
+
+import {
+  AppBar,
+  Avatar,
+  Container,
+  Toolbar,
+  Typography,
+  Button,
+  IconButton,
+  Menu,
+  MenuItem,
+  Divider,
+} from '@material-ui/core'
+
+import {
+  AccountCircle,
+  MenuIcon,
+} from '@material-ui/icons'
+
+const useStyles = makeStyles((theme) => ({
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
+  },
+  userName: {
+    marginLeft: 6,
+  },
+  divider: {
+    margin: '8px 0'
+  }
+}))
 
 export default function ButtonAppBar() {
+  const classes = useStyles()
+  const [anchorUserMenu, setAnchorUseMenu] = useState(false)
+
+  const openUserMenu = Boolean(anchorUserMenu)
+
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            News
-          </Typography>
-          <Button color="inherit">Login</Button>
-        </Toolbar>
+      <AppBar position="static" elevation={3}>
+        <Container maxWidth="lg">
+          <Toolbar>
+            <Typography variant="h6" component="div" className={classes.title}>
+              Anunx
+            </Typography>
+            <Link href="/user/publish" passHref>
+              <Button color="inherit" variant="outlined">
+                Anunciar e Vender
+              </Button>
+            </Link>
+            <IconButton color="secondary" onClick={(e) => {setAnchorUseMenu(e.currentTarget)}}>
+              {
+                true === false
+                  ?<Avatar src="" />
+                  :<AccountCircle />
+              }
+              <Typography variant="subtitle2" color="secondary" className={classes.userName}>
+                Luiz Castorino
+              </Typography>
+            </IconButton>
+
+            <Menu
+              anchorEl={anchorUserMenu}
+              open={openUserMenu}
+              onClose={() => setAnchorUseMenu(null)}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right'
+              }}
+            >
+              <Link href="/user/dashboard" passHref> 
+                <MenuItem>Meus anúncios</MenuItem>
+              </Link>
+              <Link href="/user/publish" passHref>
+                <MenuItem>Publicar novo anúncio</MenuItem>
+              </Link>
+              <Divider className={classes.divider} />
+              <MenuItem>Sair</MenuItem>
+            </Menu>
+          </Toolbar>
+        </Container>
       </AppBar>
-    </Box>
-  );
+  )
 }
