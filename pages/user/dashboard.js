@@ -14,9 +14,6 @@ import TemplateDefault from '../../src/templates/Default'
 
 //useStyles, como se fosse um CSS, para ajustar os componentes
 const useStyles = makeStyles((theme) => ({
-  container: {
-    padding: theme.spacing(8, 0, 6)
-  },
   cardMedia: {
     paddingTop: '56%'
   },
@@ -31,7 +28,7 @@ export default function Home() {
   return (
     <TemplateDefault>
 
-      <Container maxWidth="sm" className={classes.container}>
+      <Container maxWidth="sm">
         <Typography component="h1" variant="h2" align="center">
           Meus Anúncios
         </Typography>
