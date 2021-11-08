@@ -100,6 +100,10 @@ const validationSchema = yup.object().shape({
     discription: yup.string()
         .min(50, 'Escreva um descrição com pelo menos 50 caracteres.')
         .required('Campo obrigatório'),
+    price: yup.number().required('Campo obrgatório'),
+    email: yup.string().email('Digite um e-mail válido').required('Campo obrigatório'),
+    name: yup.string().required('Campo obrigatório'),
+    phone: yup.number().required('Campo obrigatório'),
 })
 
 const Publish = () => {
@@ -135,6 +139,10 @@ const Publish = () => {
                     title: '',
                     category: '',
                     discription: '',
+                    price: '',
+                    email: '',
+                    name: '',
+                    phone: '',
                 }}
                 validationSchema={validationSchema}
                 onSubmit={(values) => {
@@ -172,7 +180,7 @@ const Publish = () => {
                                                 onChange={handleChange}
                                             />
                                             <FormHelperText>
-                                                { errors.category }
+                                                { errors.title }
                                             </FormHelperText>
                                         </FormControl>
                                         <br/><br/>
@@ -264,6 +272,7 @@ const Publish = () => {
                                                 multiline
                                                 rows={6}
                                                 variant="outlined"
+                                                onChange={handleChange}
                                             />
                                             <FormHelperText>
                                                 { errors.discription }
@@ -275,18 +284,20 @@ const Publish = () => {
 
                                 <Container maxWidth="md" className={classes.boxContainer}>
                                     <Box className={classes.box}>
-                                        <Typography component="h6" variant="h6" color="textPrimary">
-                                            Preço
-                                        </Typography>
-                                        <br />
-                                        <FormControl fullWidth variant="outlined">
-                                            <InputLabel>Valor</InputLabel>
-                                            <OutlinedInput
-                                                onChange={() => {}}
+
+                                        <FormControl error={ errors.price} fullWidth>
+                                            <InputLabel className={classes.inputLabel}>Preço de venda</InputLabel>
+                                            <Input
+                                                name="price" 
+                                                variant="outlined"
+                                                onChange={handleChange}
                                                 startAdornment={<InputAdornment position="start">R$</InputAdornment>}
-                                                labelWidth={40}
                                             />
+                                            <FormHelperText>
+                                                { errors.price }
+                                            </FormHelperText>
                                         </FormControl>
+
                                     </Box>
                                 </Container>
             
@@ -295,26 +306,47 @@ const Publish = () => {
                                         <Typography component="h6" variant="h6" color="textPrimary" gutterBottom>
                                             Dados de Contato
                                         </Typography>
-                                        <TextField 
-                                            label="Nome"
-                                            size="small"
-                                            variant="outlined"
-                                            fullWidth
-                                        />
+
+                                        <FormControl error={ errors.name} fullWidth>
+                                            <InputLabel className={classes.inputLabel}>Nome</InputLabel>
+                                            <Input
+                                                name="name"
+                                                value={values.name}
+                                                onChange={handleChange}
+                                            />
+                                            <FormHelperText>
+                                                { errors.name }
+                                            </FormHelperText>
+                                        </FormControl>
+
                                         <br/><br/>
-                                        <TextField 
-                                            label="E-mail"
-                                            size="small"
-                                            variant="outlined"
-                                            fullWidth
-                                        />
+
+                                        <FormControl error={ errors.email} fullWidth>
+                                            <InputLabel className={classes.inputLabel}>E-mail</InputLabel>
+                                            <Input
+                                                name="email"
+                                                value={values.email}
+                                                onChange={handleChange}
+                                            />
+                                            <FormHelperText>
+                                                { errors.email }
+                                            </FormHelperText>
+                                        </FormControl>
+
                                         <br/><br/>
-                                        <TextField 
-                                            label="Telefone"
-                                            size="small"
-                                            variant="outlined"
-                                            fullWidth
-                                        />
+
+                                        <FormControl error={ errors.phone} fullWidth>
+                                            <InputLabel className={classes.inputLabel}>Telefone</InputLabel>
+                                            <Input
+                                                name="phone"
+                                                value={values.phone}
+                                                onChange={handleChange}
+                                            />
+                                            <FormHelperText>
+                                                { errors.phone }
+                                            </FormHelperText>
+                                        </FormControl>
+
                                     </Box>
                                 </Container>
 
