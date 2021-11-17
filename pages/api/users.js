@@ -33,6 +33,7 @@ const users = async (req, res) => {
             })
 
             user.save()
+            
             // responder sucesso
             res.status(201).json({ success: true })
 
