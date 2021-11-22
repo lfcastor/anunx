@@ -1,4 +1,4 @@
-import { makeStyles } from "@material-ui/core";
+import { makeStyles } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -17,6 +17,9 @@ const useStyles = makeStyles((theme) => ({
     loading: {
         display: 'block',
         margin:  '10px auto'
+    },
+    errorMessage: {
+        margin: '20px 0'
     },
 }))
 

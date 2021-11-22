@@ -34,7 +34,7 @@ const Singup = () => {
                 text: 'Cadastro realizado com sucesso!'
             })
 
-            router.push('/auth/singin')
+            router.push('/auth/signin')
         }
     }
 

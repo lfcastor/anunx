@@ -1,6 +1,7 @@
 import { Formik } from 'formik'
 import axios from 'axios'
 import { useRouter } from 'next/router'
+import { signIn, useSession } from 'next-auth/client'
 
 import {
     Box,
@@ -14,17 +15,27 @@ import {
     CircularProgress,
 } from '@material-ui/core'
 
+import Alert from '@material-ui/lab/Alert'
+
 import TemplateDefault from '../../../src/templates/Default'
 import { initialValues, validationSchema } from './formValues'
 import useToasty from '../../../src/contexts/Toasty'
 import useStyles from './style'
 
-const singin = () => {
+const Signin = () => {
     const classes = useStyles()
     const router = useRouter()
     const { setToasty } = useToasty()
+    const [session] = useSession()
+
+    console.log(session)
 
     const handleFormSubmit = async values => {
+        signIn('credentials', {
+            email: values.email,
+            password: values.password,
+            callbackUrl: 'http://localhost:3000/user/dashboard'
+        })
     }
 
     return (
@@ -54,6 +65,16 @@ const singin = () => {
                             }) => {
                                 return (
                                     <form onSubmit={handleSubmit}>
+
+                                        {
+                                            router.query.i === '1'
+                                            ? (
+                                                <Alert severity="error" className={classes.errorMessage} >
+                                                    Usuário ou senha inválidos
+                                                </Alert> 
+                                            )
+                                            : null
+                                        }
                                                                                 
                                         <FormControl error={ errors.email && touched.email} fullWidth className={classes.formControl}>
                                             <InputLabel >E-mail</InputLabel>
@@ -112,4 +133,4 @@ const singin = () => {
     )
 }
 
-export default singin
+export default Signin
