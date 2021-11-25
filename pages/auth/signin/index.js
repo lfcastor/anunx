@@ -33,7 +33,7 @@ const Signin = () => {
 
     const handleGoogleLogin = () => {
         signIn('google', {
-            callbackUrl: 'http://localhost:3000/user/dashboard',   
+            callbackUrl: 'http://localhost:3000/user/dashboard' 
         })
     }
 
