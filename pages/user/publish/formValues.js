@@ -3,7 +3,7 @@ import * as yup from 'yup'
 const initialValues = {
     title: '',
     category: '',
-    discription: '',
+    description: '',
     price: '',
     email: '',
     name: '',
@@ -17,7 +17,7 @@ const validationSchema = yup.object().shape({
         .max(100, 'Título muito grande')
         .required('Campo obrigatório'),
     category: yup.string().required('Campo obrigatório'),
-    discription: yup.string()
+    description: yup.string()
         .min(50, 'Escreva um descrição com pelo menos 50 caracteres.')
         .required('Campo obrigatório'),
     price: yup.number().required('Campo obrgatório'),

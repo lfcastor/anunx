@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { useSession, loading } from 'next-auth/client'
 
 const CheckAuth = ({ Component, pageProps }) => {
-    const [ session ] = useSession()
+    const [ session, loading ] = useSession()
     const router = useRouter()
 
     useEffect(() => {
