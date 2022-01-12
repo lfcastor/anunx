@@ -12,7 +12,10 @@ import {
 import { makeStyles } from '@material-ui/core'
 
 import Carousel from 'react-material-ui-carousel'
-import TemplateDefault from '../../src/templates/Default'
+import TemplateDefault from '../../../src/templates/Default'
+import ProductsModel from '../../../src/models/products'
+import dbConnect from '../../../src/utils/dbConnect'
+import { formatCurrency } from '../../../src/utils/currency'
 
 const useStyles = makeStyles((theme) => ({
     box: {
@@ -35,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-const Product = () => {
+const Product = ({ product }) => {
     const classes = useStyles()
 
     return(
@@ -53,33 +56,31 @@ const Product = () => {
                                     }
                                 }}
                             >
-                                <Card className={classes.card}>
-                                    <CardMedia
-                                    className={classes.cardMedia}
-                                    image="https://source.unsplash.com/random?a=1"
-                                    title="Titulo da imagem"
-                                    />
-                                </Card>
-                                <Card className={classes.card}>
-                                    <CardMedia
-                                    className={classes.cardMedia}
-                                    image="https://source.unsplash.com/random?a=2"
-                                    title="Titulo da imagem"
-                                    />
-                                </Card>
+                                {
+                                    product.files.map(file => (
+                                        <Card key={file.name} className={classes.card}>
+                                            <CardMedia
+                                            className={classes.cardMedia}
+                                            image={`/uploads/${file.name}`}
+                                            title={product.title}
+                                            />
+                                        </Card>
+                                    ))
+                                }
                             </Carousel>
                         </Box>
 
                         <Box className={classes.box} textAlign="left" >
-                            <Typography component="span" variant="caption" >Plubicado 16 junho de 2021</Typography>
-                            <Typography component="h4" variant="h4" className={classes.produtName} >Jaguar XE 2.0 D R-Sport Aut.</Typography>
-                            <Typography component="h4" variant="h4" className={classes.price} >R$ 50.000,00</Typography>
-                            <Chip label="Categoria" />
+                            <Typography component="span" variant="caption" >Plubicado 16 junho de 2021 -- TO DO</Typography>
+                            <Typography component="h4" variant="h4" className={classes.produtName} >{product.title}</Typography>
+                            <Typography component="h4" variant="h4" className={classes.price} >{formatCurrency(product.price)}</Typography>
+                            <Chip label={product.category} />
                         </Box>
 
                         <Box className={classes.box} textAlign="left" >
                             <Typography component="h6" variant="h6">Descrição</Typography>
-                            <Typography component="p" variant="body2">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                            <Typography component="p" variant="body2">
+                                {product.description}
                             </Typography>
                             
                         </Box>
@@ -90,15 +91,17 @@ const Product = () => {
                         <Card elevation={0} className={classes.box}>
                             <CardHeader
                                 avatar={
-                                    <Avatar>L</Avatar>
+                                    <Avatar src={product.user.image}>
+                                        { product.user.image || product.user.name[0] }
+                                    </Avatar>
                                 }
-                                title="Luiz Castorino"
-                                subheader="luiz.castorino@gmail.com"
+                                title={product.user.name}
+                                subheader={product.user.email}
                             />
                         </Card>
                         <CardMedia 
-                            image="https://source.unsplash.com/random"
-                            title="Luiz Castorino"
+                            image={product.user.image}
+                            title={product.user.name}
                         />
                         <Box className={classes.box}>
                             <Typography component="h6" variant="h6">
@@ -110,6 +113,20 @@ const Product = () => {
             </Container>
         </TemplateDefault>
     )
+}
+
+export async function getServerSideProps({ query }) {
+    const { id } = query
+
+    await dbConnect()
+
+    const product = await ProductsModel.findOne({ _id: id })
+
+    return {
+        props: {
+            product: JSON.parse(JSON.stringify(product))
+        }
+    }
 }
 
 export default Product
