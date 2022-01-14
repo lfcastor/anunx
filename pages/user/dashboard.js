@@ -21,7 +21,7 @@ import dbConnect from '../../src/utils/dbConnect'
 import ProductsModel from '../../src/models/products'
 import TemplateDefault from '../../src/templates/Default'
 import Card from '../../src/components/Card'
-import { formatCurreny } from '../../src/utils/currency'
+import { formatCurrency } from '../../src/utils/currency'
 import useToasty from '../../src/contexts/Toasty'
 
 //useStyles, como se fosse um CSS, para ajustar os componentes
@@ -129,7 +129,7 @@ const Home = ({ products }) => {
                   <Card 
                     image={`/uploads/${product.files[0].name}`}
                     title={product.title}
-                    subtitle={formatCurreny(product.price)}
+                    subtitle={formatCurrency(product.price)}
                     actions={
                       <>
                         <Button size="small" color="primary">
